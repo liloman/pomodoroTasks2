@@ -1,0 +1,7 @@
+
+0.1 
+*Integration with taskwarrior
+*Integration with timewarrior tracking every second (see https://github.com/liloman/warriors)
+*moved to python
+*dbus
+*testing
