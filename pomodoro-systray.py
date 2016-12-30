@@ -82,7 +82,9 @@ class PomodoroApp(dbus.service.Object):
                     new_task.save()
                     # update the comboboxtext of pending tasks
                     uuids[new_task['id']]=str(new_task['uuid'])
-                    line=str(new_task['id'])+" ["+str(new_task['project'])+"]-"+new_task['description']
+                    desc=u''.join(new_task['description']).encode('utf-8').strip() 
+                    proj=u''.join(new_task['project']).encode('utf-8').strip() 
+                    line=str(new_task['id'])+" ["+str(proj)+"]-"+desc
                     cbChange.append_text(line)
                     # select the new one
                     cbChange.set_active(len(uuids)-1)
@@ -108,10 +110,15 @@ class PomodoroApp(dbus.service.Object):
 
             projects = set(['None'])
             for task in self.tw.tasks:
-                task.refresh()
-                projects.add(str(task['project']))
+                try:  
+                    task.refresh()
+                    if task['project']:
+                        projects.add(task['project'])
+                except:
+                    next
 
-            for project in projects:
+            cbProject.remove_all()
+            for project in sorted(projects):
                 cbProject.append_text(project)
             cbProject.set_active(0)
             wAddTask.show()
@@ -166,7 +173,9 @@ class PomodoroApp(dbus.service.Object):
         for task in self.tw.tasks.pending():
             if not task.active:
                 task.refresh()
-                line=str(task['id'])+" ["+str(task['project'])+"]-"+str(task['description'])
+                desc=u''.join(task['description']).encode('utf-8').strip() 
+                proj=u''.join(task['project']).encode('utf-8').strip() 
+                line=str(task['id'])+" ["+str(proj)+"]-"+desc
                 uuids[task['id']]=str(task['uuid'])
                 cbChange.append_text(line)
         wChangeTask.show()
