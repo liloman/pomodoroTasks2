@@ -150,8 +150,8 @@ class Pomodoro(dbus.service.Object):
         msg = ""
         if active:
             self.state = "started"
-            project=str(active['project'])
-            desc=str(active['description'])
+            project=u''.join(active['project']).encode('utf-8').strip() 
+            desc=u''.join(active['description']).encode('utf-8').strip() 
             uuid=active['uuid']
             msg="\nBreak num:"+str(self.breaks)+"\nProject:"+project+"\n"+desc
         rest = self.timer_pomodoro / 8

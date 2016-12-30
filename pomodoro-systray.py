@@ -70,9 +70,9 @@ class PomodoroApp(dbus.service.Object):
         # subform to create a new task
         def showAddTask(widget):
             def AddTask(widget):
-                # trim the text to not allow only whitespaces/tabs
-                desc = eDescription.get_text().strip()
-                proj = eProject.get_text().strip() 
+                # decode and trim the text to not allow only whitespaces/tabs
+                desc = eDescription.get_text().decode('utf-8').strip()
+                proj = eProject.get_text().decode('utf-8').strip() 
                 if desc:
                     new_task = Task(self.tw)
                     new_task['description'] = desc
@@ -113,7 +113,7 @@ class PomodoroApp(dbus.service.Object):
                 try:  
                     task.refresh()
                     if task['project']:
-                        projects.add(task['project'])
+                        projects.add(u''.join(task['project']).encode('utf-8').strip())
                 except:
                     next
 
