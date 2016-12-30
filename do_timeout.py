@@ -20,17 +20,18 @@ session_bus = bus.get_object('org.liloman.pomodoro', "/daemon")
 interface = dbus.Interface(session_bus, "org.liloman.pomodoroInterface")
 
 def onYesPressed(self):
+    subprocess.Popen(['timew', 'stop'])
     print (interface.do_fsm("start")[0])
     wContinue.destroy()
     Gtk.main_quit()  
 
 def onNoPressed(self):
+    subprocess.Popen(['timew', 'stop'])
     wContinue.destroy()
     Gtk.main_quit()  
 
 def onDeleteWindow(self,*args):
     wContinue.show_all()
-    subprocess.Popen(['timew', 'stop'])
 
 def onBackWorkPressed(self):
     subprocess.Popen(['timew', 'stop'])
