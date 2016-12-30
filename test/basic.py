@@ -9,7 +9,7 @@ import time
 import re
 import os
 
-dirname, filename = os.path.split(os.path.abspath(__file__))
+dirname, filename = os.path.split(os.path.realpath(__file__))
 #change to the project dir
 os.chdir(dirname)
 

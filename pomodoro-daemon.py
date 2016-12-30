@@ -16,8 +16,8 @@ import sys
 import dbus.service
 import dbus.mainloop.glib
 
-dirname, filename = os.path.split(os.path.abspath(__file__))
-#change to the project dir
+dirname, filename = os.path.split(os.path.realpath(__file__))
+#change to the project real dir
 os.chdir(dirname)
 
 class Pomodoro(dbus.service.Object):
@@ -176,10 +176,11 @@ class Pomodoro(dbus.service.Object):
 
     def do_timeout(self):
         self.do_stop()
+        self.breaks+=1
         if self.breaks == self.maxbreaks:
-            cmd = ['./do_timeout.py', self.ltimeout ]
+            cmd = ['./do_timeout.py', self.ltimeout, str(self.breaks) ]
         else:
-            cmd = ['./do_timeout.py', self.stimeout ]
+            cmd = ['./do_timeout.py', self.stimeout, str(self.breaks) ]
         subprocess.Popen(cmd)
         return "call do_timeout.py"
 
@@ -190,7 +191,6 @@ class Pomodoro(dbus.service.Object):
         if self.state == "started":
             self.time_elapsed+=5
             if self.time_elapsed >= self.timer_pomodoro*60:
-                self.breaks+=1
                 self.do_timeout()
 
 

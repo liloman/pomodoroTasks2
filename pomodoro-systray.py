@@ -36,6 +36,11 @@ class PomodoroApp(dbus.service.Object):
         self.interface = dbus.Interface(daemon_client, "org.liloman.pomodoroInterface")
 
 
+    @dbus.service.method("org.liloman.pomodoro.systrayInterface", in_signature='', out_signature='')
+    def show_change_task(self):
+        self.showChangeTask(Gtk.ImageMenuItem())
+
+
     # to be called from the daemon 
     @dbus.service.method("org.liloman.pomodoro.systrayInterface", in_signature='', out_signature='')
     def quit(self):

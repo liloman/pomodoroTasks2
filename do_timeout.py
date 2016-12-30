@@ -56,13 +56,22 @@ btNo.connect("clicked",onNoPressed)
 wTimeout.connect("delete-event",onDeleteWindow)
 btBack = builder.get_object("btBackWork")
 btBack.connect("clicked",onBackWorkPressed)
+pbTimeout = builder.get_object("pbTimeout")
+
 
 # 1 minute = 600 
 # 5 minutes = x
-if len(sys.argv) == 2:
+if len(sys.argv) >= 2:
     timeout=int(sys.argv[1])
+    breaks=int(sys.argv[2])
 else:
     timeout=5
+    breaks=0
+
+if breaks < 4:
+    pbTimeout.set_text("Go away you fool! (Break n:"+str(breaks)+")")
+else:
+    pbTimeout.set_text("Go away you fool! (Long Break!")
 
 GObject.timeout_add(600*timeout, update_timeout_bar)
 activity_mode = False
