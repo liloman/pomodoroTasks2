@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import subprocess
 import dbus
 import sys
 import os
@@ -29,8 +30,10 @@ def onNoPressed(self):
 
 def onDeleteWindow(self,*args):
     wContinue.show_all()
+    subprocess.Popen(['timew', 'stop'])
 
 def onBackWorkPressed(self):
+    subprocess.Popen(['timew', 'stop'])
     print (interface.do_fsm("start")[0])
     Gtk.main_quit()
 
@@ -42,6 +45,7 @@ def update_timeout_bar():
     if new_value > 1:
         new_value = 0
         wTimeout.destroy()
+        subprocess.Popen(['timew', 'stop'])
         wContinue.show_all()
     pbTimeout.set_fraction(new_value)
     # As this is a timeout function, return True so that it
@@ -71,11 +75,13 @@ else:
 if breaks < 4:
     pbTimeout.set_text("Go away you fool! (Break n:"+str(breaks)+")")
 else:
-    pbTimeout.set_text("Go away you fool! (Long Break!")
+    pbTimeout.set_text("Super rest! ("+str(os.getenv('POMODORO_LTIMEOUT',15))+" minutes)")
 
 GObject.timeout_add(600*timeout, update_timeout_bar)
 activity_mode = False
 
+#log break time with timewarrior to know the total free time of today/week/....
+subprocess.Popen(['timew', 'start', 'pomodoro_timeout', '+nowork'])
 do_timeout()
 Gtk.main()
 
