@@ -15,6 +15,7 @@ A "week" hack project.
 ###Dependencies (python)
 
 1. pip install tasklib --user
+2. apt-get/dnf/whatever install dbus-python
 
 
 ###Why yet another pomodoro app?
