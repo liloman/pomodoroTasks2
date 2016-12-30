@@ -2,7 +2,8 @@ language: python
 
 before_install:
   # To install bats and test our shell/bash functions
-  - apt-get install dbus-python
+  - sudo apt-get -qq update
+  - sudo apt-get install dbus-python -y
   - pip install tasklib
 
 
