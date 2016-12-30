@@ -152,8 +152,14 @@ class Pomodoro(dbus.service.Object):
             self.state = "started"
             project=u''.join(active['project']).encode('utf-8').strip() 
             desc=u''.join(active['description']).encode('utf-8').strip() 
-            uuid=active['uuid']
             msg="\nBreak num:"+str(self.breaks)+"\nProject:"+project+"\n"+desc
+        elif self.last_task_id != 0:
+            last=self.tw.tasks.get(uuid=self.last_task_id)
+            last.refresh()
+            project=u''.join(last['project']).encode('utf-8').strip() 
+            desc=u''.join(last['description']).encode('utf-8').strip() 
+            msg="\nBreak num:"+str(self.breaks)+"\nLast Project:"+project+"\n"+desc
+
         rest = self.timer_pomodoro / 8
         if rest > 0:
             actual=self.time_elapsed / (rest*60)
