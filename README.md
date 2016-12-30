@@ -1,4 +1,6 @@
 
+Travis: [![Build Status](https://travis-ci.org/liloman/pomodoroTasks2.svg?branch=master)](https://travis-ci.org/liloman/pomodoroTasks2)
+
 Don't make any excuse anymore to not use the [Pomodoro Technique](https://en.wikipedia.org/wiki/Pomodoro_Technique)!
 
 
