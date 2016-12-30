@@ -64,9 +64,9 @@ Minimalistic implementation with FSM (Finite State Machine) and some dbus nicene
 ###TODO
 
 - [x] dbus 
-- [x] Unit testing
-- [ ] \(99% done\) Timewarrior integration to track the complete lifespan of your computer. ;)
-- [ ] Dont wait a minute to refresh the trayicon when used the cli
+- [x] Timewarrior integration to track the complete lifespan of your computer. ;)
+- [x] Dont wait a minute to refresh the trayicon when used the cli
+- [ ] Unit testing \(fix travis install ... \)
 
 ###FIXED
 

@@ -1,4 +1,8 @@
 
+0.2
+*Client with autocompletion
+
+
 0.1 
 *Integration with taskwarrior
 *Integration with timewarrior tracking every second (see https://github.com/liloman/warriors)
