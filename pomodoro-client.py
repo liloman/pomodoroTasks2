@@ -10,7 +10,7 @@ def usage():
     print """
 Usage:"""+ os.path.basename(sys.argv[0])+""" OPTIONS
 
-   Daemon options:
+Daemon options:
    do_start UUID   start the task with the given task
    start           start the last task
    pause           pause the last task
@@ -18,10 +18,10 @@ Usage:"""+ os.path.basename(sys.argv[0])+""" OPTIONS
    reset           reset the numbers of breaks and time left
    status          show the current status of the daemon
 
-   Systray options:
+Systray options:
    systray         show the change task form
 
-   General options:
+General options:
    -h, --help      show this help
    quit            quit the pomodoro daemon & systray
 """
