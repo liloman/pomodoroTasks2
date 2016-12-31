@@ -83,7 +83,9 @@ class PomodoroApp(dbus.service.Object):
                     # update the comboboxtext of pending tasks
                     uuids[new_task['id']]=str(new_task['uuid'])
                     desc=u''.join(new_task['description']).encode('utf-8').strip() 
-                    proj=u''.join(new_task['project']).encode('utf-8').strip() 
+                    proj='None'
+                    if new_task['project']:
+                        proj=u''.join(new_task['project']).encode('utf-8').strip() 
                     line=str(new_task['id'])+" ["+str(proj)+"]-"+desc
                     cbChange.append_text(line)
                     # select the new one
@@ -108,13 +110,18 @@ class PomodoroApp(dbus.service.Object):
             cbProject    = builder.get_object("cbProject")
             lbDescription = builder.get_object("lbDescription")
 
+
+            #reset the fields
+            eDescription.set_text('')
+            eProject.set_text('None')
+
             projects = set(['None'])
-            for task in self.tw.tasks:
-                try:  
+            for task in self.tw.tasks.all():
+                try: # maybe some duplicate or something like that
                     task.refresh()
                     if task['project']:
                         projects.add(u''.join(task['project']).encode('utf-8').strip())
-                except:
+                except: 
                     next
 
             cbProject.remove_all()
@@ -174,7 +181,9 @@ class PomodoroApp(dbus.service.Object):
             if not task.active:
                 task.refresh()
                 desc=u''.join(task['description']).encode('utf-8').strip() 
-                proj=u''.join(task['project']).encode('utf-8').strip() 
+                proj='None'
+                if task['project']:
+                    proj=u''.join(task['project']).encode('utf-8').strip() 
                 line=str(task['id'])+" ["+str(proj)+"]-"+desc
                 uuids[task['id']]=str(task['uuid'])
                 cbChange.append_text(line)
