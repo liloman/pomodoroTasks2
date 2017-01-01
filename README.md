@@ -7,13 +7,14 @@ Don't make any excuse anymore to not use the [Pomodoro Technique](https://en.wik
 Pomodoro technique allows you to concentrate on the current task and take short breaks meanwhile works.
 If you get that and join it with a task manager alike taskwarrior (or any other) you can have a complete workflow, accounting the time spend on any task meanwhile you take the proper rests for your brain, body, life and eyes. :)
 
-A "week" hack project.
+A previous "week" hack project.
 
 
-###Dependencies (python)
+###Dependencies (python based)
 
 1. pip install tasklib --user
-2. apt-get/dnf/whatever install python-dbus/dbus-python/...
+2. apt-get/dnf/whatever install python-dbus/dbus-python/... (if not already...)
+3. taskwarrior and timewarrior
 
 
 ###Why yet another pomodoro app?
@@ -49,14 +50,24 @@ Trayicon:
 
 ###Install 
 
-The typical workflow is start the daemon once log in (systemd,openbox autostart, bash_profile ...) and 
-then control it with the simple trayicon app.
+You can customize the working time and the break times (short and long), just exporting a few ENV variables.
 
-There is included a simple client cli tool too.
+In my case (same as default):
+
+```bash
+#default pomodoro session (minutes)
+export POMODORO_TIMEOUT=25
+#default pomodoro short break (minutes)
+export POMODORO_STIMEOUT=5
+#default pomodoro long break (minutes)
+export POMODORO_LTIMEOUT=15
+#Launch pomodoroTasks2 (daemon) 
+~/.local/bin/pomodoro-daemon.py
+```
+
+So just launch the pomodoro-daemon.py and you are ready to go, feel free to add it on autostart/systemd/... :)
 
 ###Spec
-
-Boilerplate implementation of the pomodoro technique with a python-dbus written client/server architecture.
 
 Minimalistic implementation with FSM (Finite State Machine) and some dbus niceness. :)
 
