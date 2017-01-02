@@ -56,19 +56,18 @@ def addReminder(desc,date):
 #############
 
 def onYesPressed(self):
-    update_reminders()
     subprocess.Popen(['timew', 'stop'])
     print (interface.do_fsm("start")[0])
     wContinue.destroy()
     Gtk.main_quit()  
 
 def onNoPressed(self):
-    update_reminders()
     subprocess.Popen(['timew', 'stop'])
     wContinue.destroy()
     Gtk.main_quit()  
 
 def onDeleteWindow(self,*args):
+    update_reminders()
     wContinue.show_all()
 
 def onBackWorkPressed(self):
