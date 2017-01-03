@@ -52,6 +52,17 @@ class TestPomodoro(unittest.TestCase):
         prog = re.compile('paused .* left.*')
         self.assertTrue(prog.match(interface.do_fsm("status")[0]))
 
+    def test_done_current(self):
+        other_task = Task(self.tw, description="task to be done")
+        other_task.save()
+        uuid2 = other_task['uuid']
+        self.assertEquals(interface.do_start(dbus.Dictionary({'uuid':  uuid2 , 'resume': 'No'}))[0],"started:"+uuid2)
+        prog = re.compile('started .* left.*')
+        self.assertTrue(prog.match(interface.do_fsm("status")[0]))
+        self.assertEquals(interface.done_current()[0],"ok")
+        self.assertTrue(prog.match(interface.do_fsm("status")[0]))
+        self.assertEquals(interface.done_current()[0],"no active task")
+
     def test_resume(self):
         self.start()
         self.assertEquals(interface.do_fsm("stop")[0],"ok")
