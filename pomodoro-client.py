@@ -46,8 +46,11 @@ if len(sys.argv) == 1:
 
 com=sys.argv[1]
 
+dbus_path="unix:path=/run/user/"+str(os.getuid())+"/bus"
+
 try:
-    bus = dbus.SessionBus()
+    # use busConnection better than bus = dbus.SessionBus() to work with systemd for example
+    bus = dbus.bus.BusConnection(dbus_path)
     session_bus = bus.get_object('org.liloman.pomodoro', "/daemon")
     interface = dbus.Interface(session_bus, "org.liloman.pomodoroInterface")
 except:
@@ -58,7 +61,8 @@ if com == "quit":
     interface.quit()
     print "pomodoro daemon halted"
 elif com == "systray":
-    bus = dbus.SessionBus()
+    # use busConnection better than bus = dbus.SessionBus() to work with systemd for example
+    bus = dbus.bus.BusConnection(dbus_path)
     session_bus = bus.get_object('org.liloman.pomodoro.systray', "/systray")
     systray = dbus.Interface(session_bus, "org.liloman.pomodoro.systrayInterface")
     systray.show_change_task()
