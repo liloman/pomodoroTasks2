@@ -20,6 +20,7 @@ class TestPomodoro(unittest.TestCase):
     uuid = new_task['uuid']
 
 
+
     def get_active_task(self):
         for task in self.tw.tasks.pending():
             if task.active:
@@ -35,10 +36,7 @@ class TestPomodoro(unittest.TestCase):
             return
 
     def start(self):
-        interface.do_start(dbus.Dictionary({'uuid':  self.uuid , 'resume': 'No'}))
-
-    def test_start(self):
-        self.assertTrue(interface.do_start(dbus.Dictionary({'uuid':  self.uuid , 'resume': 'No'}))[0].startswith("started"))
+        self.assertEquals(interface.do_start(dbus.Dictionary({'uuid':  self.uuid , 'resume': 'No'}))[0],"started:"+self.uuid)
 
     def test_stop(self):
         self.start()
@@ -65,6 +63,28 @@ class TestPomodoro(unittest.TestCase):
         self.assertTrue(prog.match(interface.do_fsm("status")[0]))
         self.assertEquals(interface.do_fsm("start")[0],"ok")
         self.assertEquals(interface.do_fsm("start")[0],"Already started")
+        # test done and resume
+        other_task = Task(self.tw, description="task 2 for the test")
+        other_task.save()
+        uuid2 = other_task['uuid']
+        self.assertEquals(interface.do_start(dbus.Dictionary({'uuid':  uuid2 , 'resume': 'No'}))[0],"started:"+uuid2)
+        prog = re.compile('started .* left.*')
+        self.assertTrue(prog.match(interface.do_fsm("status")[0]))
+        self.assertEquals(interface.do_fsm("stop")[0],"ok")
+        other_task.done()
+        self.assertEquals(interface.do_fsm("start")[0],"ok")
+        self.assertTrue(prog.match(interface.do_fsm("status")[0]))
+        # test delete and resume
+        other_task = Task(self.tw, description="task 3 for the test")
+        other_task.save()
+        uuid2 = other_task['uuid']
+        self.assertEquals(interface.do_start(dbus.Dictionary({'uuid':  uuid2 , 'resume': 'No'}))[0],"started:"+uuid2)
+        prog = re.compile('started .* left.*')
+        self.assertTrue(prog.match(interface.do_fsm("status")[0]))
+        self.assertEquals(interface.do_fsm("stop")[0],"ok")
+        other_task.delete()
+        self.assertEquals(interface.do_fsm("start")[0],"ok")
+        self.assertTrue(prog.match(interface.do_fsm("status")[0]))
 
     def test_reset(self):
         self.start()

@@ -99,8 +99,8 @@ class Pomodoro(dbus.service.Object):
         active = self.get_active_task ()
         #if the user mark current as done and dont select a new task to work in
         if active:
-            active.stop ()
             self.last_task_id = active['uuid']
+            active.stop ()
         self.state = "paused"
         return "ok"
 
@@ -108,8 +108,11 @@ class Pomodoro(dbus.service.Object):
     def do_resume(self):
         #If resumed from pause/stop without changing the current task from GUI
         if  self.last_task_id != 0:
-            new=self.tw.tasks.get(uuid=self.last_task_id)
-            new.start()
+            try:
+                new=self.tw.tasks.pending().get(uuid=self.last_task_id)
+                new.start()
+            except: #try to resume a now done/deleted/... task
+                self.last_task_id = 0
         else: #let just use the timer without any task working in
             self.state = "started"
             return "no previous task"
@@ -148,16 +151,19 @@ class Pomodoro(dbus.service.Object):
         remaining = "%02d:%02d" % divmod(self.timer_pomodoro*60 - self.time_elapsed,60)
         active = self.get_active_task ()
         msg = ""
+        project = "None"
         if active:
             self.state = "started"
-            project=u''.join(active['project']).encode('utf-8').strip() 
-            desc=u''.join(active['description']).encode('utf-8').strip() 
+            # must convert to str() if none
+            project=u''.join(str(active['project'])).encode('utf-8').strip() 
+            desc=u''.join(str(active['description'])).encode('utf-8').strip() 
             msg="\nBreak num:"+str(self.breaks)+"\nProject:"+project+"\n"+desc
         elif self.last_task_id != 0:
             last=self.tw.tasks.get(uuid=self.last_task_id)
             last.refresh()
-            project=u''.join(last['project']).encode('utf-8').strip() 
-            desc=u''.join(last['description']).encode('utf-8').strip() 
+            # must convert to str() if none
+            project=u''.join(str(last['project'])).encode('utf-8').strip() 
+            desc=u''.join(str(last['description'])).encode('utf-8').strip() 
             msg="\nBreak num:"+str(self.breaks)+"\nLast Project:"+project+"\n"+desc
 
         rest = self.timer_pomodoro / 8
@@ -225,6 +231,7 @@ class Pomodoro(dbus.service.Object):
                 new=self.tw.tasks.get(uuid=uid)
                 active.stop()
                 new.start()
+                self.last_task_id = uid
                 if resume == 'No':
                     self.time_elapsed = 0 
                 self.update_systray()
@@ -241,6 +248,7 @@ class Pomodoro(dbus.service.Object):
 
             if resume == 'No':
                 self.time_elapsed = 0 
+            self.last_task_id = uid
             self.update_systray()
             return ["started:"+uid]
 
