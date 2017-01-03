@@ -191,7 +191,7 @@ class Pomodoro(dbus.service.Object):
         if self.breaks == self.maxbreaks:
             cmd = ['./do_timeout.py', self.ltimeout, str(self.breaks) ]
             # reset number of breaks
-            self.breaks = 1
+            self.breaks = 0
         else:
             cmd = ['./do_timeout.py', self.stimeout, str(self.breaks) ]
         subprocess.Popen(cmd)
