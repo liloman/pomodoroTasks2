@@ -61,7 +61,7 @@ class Pomodoro(dbus.service.Object):
     #timeout wait for events (seconds)
     timeout = 60
     #Counter for breaks
-    breaks = 0
+    breaks = 1
     #Total time elapsed
     time_elapsed = 0
     last_task_id = 0
@@ -135,7 +135,7 @@ class Pomodoro(dbus.service.Object):
 
     def do_reset(self):
         self.do_stop()
-        self.breaks = 0
+        self.breaks = 1
         if self.last_task_id != 0:
             self.do_start(dbus.Dictionary({'uuid': self.last_task_id, 'resume': 'No'}))
         else: # if the user wants to reset the timer with no task working in
@@ -188,14 +188,14 @@ class Pomodoro(dbus.service.Object):
 
     def do_timeout(self):
         self.do_stop()
-        self.breaks+=1
         if self.breaks == self.maxbreaks:
             cmd = ['./do_timeout.py', self.ltimeout, str(self.breaks) ]
             # reset number of breaks
-            self.breaks = 0
+            self.breaks = 1
         else:
             cmd = ['./do_timeout.py', self.stimeout, str(self.breaks) ]
         subprocess.Popen(cmd)
+        self.breaks+=1
         return "call do_timeout.py"
 
     def increment(self):

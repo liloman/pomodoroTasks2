@@ -120,7 +120,7 @@ if len(sys.argv) >= 2:
     breaks=int(sys.argv[2])
 else:
     timeout=5
-    breaks=0
+    breaks=1
 
 if breaks < 4:
     pbTimeout.set_text("Go away you fool! (Break n:"+str(breaks)+")")
