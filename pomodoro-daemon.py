@@ -152,18 +152,23 @@ class Pomodoro(dbus.service.Object):
         active = self.get_active_task ()
         msg = ""
         project = "None"
+        desc = "None"
         if active:
             self.state = "started"
-            # must convert to str() if none
-            project=u''.join(str(active['project'])).encode('utf-8').strip() 
-            desc=u''.join(str(active['description'])).encode('utf-8').strip() 
+            #must work do in utf8
+            if u''.join(active['project']).encode('utf-8').strip()  != "":
+                project=u''.join(active['project']).encode('utf-8').strip() 
+            if u''.join(active['description']).encode('utf-8').strip()  != "":
+                desc=u''.join(active['description']).encode('utf-8').strip() 
             msg="\nBreak num:"+str(self.breaks)+"\nProject:"+project+"\n"+desc
         elif self.last_task_id != 0:
             last=self.tw.tasks.get(uuid=self.last_task_id)
             last.refresh()
-            # must convert to str() if none
-            project=u''.join(str(last['project'])).encode('utf-8').strip() 
-            desc=u''.join(str(last['description'])).encode('utf-8').strip() 
+            #must work do in utf8
+            if u''.join(last['project']).encode('utf-8').strip()  != "":
+                project=u''.join(last['project']).encode('utf-8').strip() 
+            if u''.join(last['description']).encode('utf-8').strip()  != "":
+                desc=u''.join(last['description']).encode('utf-8').strip() 
             msg="\nBreak num:"+str(self.breaks)+"\nLast Project:"+project+"\n"+desc
 
         rest = self.timer_pomodoro / 8
