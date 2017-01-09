@@ -83,8 +83,8 @@ def update_timeout_bar():
     new_value = pbTimeout.get_fraction() + 0.01
     if new_value > 1:
         new_value = 0
+        update_reminders()
         wTimeout.destroy()
-        subprocess.Popen(['timew', 'stop'])
         wContinue.show_all()
     pbTimeout.set_fraction(new_value)
     # As this is a timeout function, return True so that it
