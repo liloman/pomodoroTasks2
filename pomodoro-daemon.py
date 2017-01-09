@@ -62,6 +62,8 @@ class Pomodoro(dbus.service.Object):
     timeout = 60
     #Counter for breaks
     breaks = 1
+    #Continuos mode
+    continuous = False
     #Total time elapsed
     time_elapsed = 0
     last_task_id = 0
@@ -160,7 +162,7 @@ class Pomodoro(dbus.service.Object):
                 project=u''.join(active['project']).encode('utf-8').strip() 
             if u''.join(active['description']).encode('utf-8').strip()  != "":
                 desc=u''.join(active['description']).encode('utf-8').strip() 
-            msg="\nBreak num:"+str(self.breaks)+"\nProject:"+project+"\n"+desc
+            msg="\nBreak num:"+str(self.breaks)+" Continuous mode:"+str(self.continuous)+"\nProject:"+project+"\n"+desc
         elif self.last_task_id != 0:
             last=self.tw.tasks.get(uuid=self.last_task_id)
             last.refresh()
@@ -169,7 +171,7 @@ class Pomodoro(dbus.service.Object):
                 project=u''.join(last['project']).encode('utf-8').strip() 
             if u''.join(last['description']).encode('utf-8').strip()  != "":
                 desc=u''.join(last['description']).encode('utf-8').strip() 
-            msg="\nBreak num:"+str(self.breaks)+"\nLast Project:"+project+"\n"+desc
+            msg="\nBreak num:"+str(self.breaks)+" Continuous mode:"+str(self.continuous)+"\nLast Project:"+project+"\n"+desc
 
         rest = self.timer_pomodoro / 8
         if rest > 0:
@@ -192,6 +194,12 @@ class Pomodoro(dbus.service.Object):
         return self.state+" "+remaining+" left"+msg
 
     def do_timeout(self):
+        if self.continuous:
+           self.time_elapsed = 0
+           if self.breaks == self.maxbreaks:
+               self.breaks = 0
+           self.breaks+=1
+           return "call do_timeout.py"
         self.do_stop()
         if self.breaks == self.maxbreaks:
             cmd = ['./do_timeout.py', self.ltimeout, str(self.breaks) ]
@@ -212,6 +220,10 @@ class Pomodoro(dbus.service.Object):
             if self.time_elapsed >= self.timer_pomodoro*60:
                 self.do_timeout()
 
+    @dbus.service.method("org.liloman.pomodoroInterface", in_signature='', out_signature='as')
+    def toggle_continuous(self):
+        self.continuous=not self.continuous
+        return [str(self.continuous)]
 
     @dbus.service.method("org.liloman.pomodoroInterface", in_signature='a{ss}', out_signature='as')
     def do_start(self, dic):

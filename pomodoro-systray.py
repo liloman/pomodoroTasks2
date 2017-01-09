@@ -58,6 +58,10 @@ class PomodoroApp(dbus.service.Object):
     def  _fsm(self,action):
         print ("reply:"+self.interface.do_fsm(action)[0])
 
+    def _toggle_continuous(self):
+        print ("reply:"+self.interface.toggle_continuous()[0])
+
+
     def left_click_event(self,icon):
         threading.Thread(target=self._fsm,args=['pause']).start()
 
@@ -190,6 +194,8 @@ class PomodoroApp(dbus.service.Object):
         wChangeTask.show()
 
     def right_click_event(self, icon, button, time):
+        def toggle_continuous(ImageMenuItem):
+            threading.Thread(target=self._toggle_continuous,args=[]).start()
 
         def _quit_daemon():
             self.interface.quit()
@@ -227,6 +233,7 @@ class PomodoroApp(dbus.service.Object):
         self.menu = Gtk.Menu()
 
         self.menu.append(connect_menu_item("Change task", "edit-paste", self.showChangeTask))
+        self.menu.append(connect_menu_item("Toggle continuous", "gtk-goto-last", toggle_continuous))
         self.menu.append(connect_menu_item("Reset", "edit-redo", do_reset))
         self.menu.append(connect_menu_item("Stop", "process-stop", do_stop))
         self.menu.append(connect_menu_item("Take a break", "alarm-symbolic", take_a_break))
