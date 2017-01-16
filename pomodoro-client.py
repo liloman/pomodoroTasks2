@@ -48,11 +48,11 @@ if len(sys.argv) == 1:
 com=sys.argv[1]
 
 #Get address bus
-if os.path.exists("/run/user/"+str(os.getuid())+"/bus"):
+if os.getenv('DBUS_SESSION_BUS_ADDRESS'):
+    dbus_path=str(os.getenv('DBUS_SESSION_BUS_ADDRESS'))
+elif os.path.exists("/run/user/"+str(os.getuid())+"/bus"):
     dbus_path="unix:path=/run/user/"+str(os.getuid())+"/bus"
-elif os.getenv('DBUS_SESSION_BUS_ADDRESS'):
-    print str(os.getenv(DBUS_SESSION_BUS_ADDRESS))
-    dbus_path=str(os.getenv(DBUS_SESSION_BUS_ADDRESS))
+
 else:
     # We need to get the dbus environment variable 
     # These environment variables are stored in $HOME/.dbus/session-bus
