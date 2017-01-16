@@ -10,12 +10,12 @@
     <property name="icon">../images/iconStarted-0.png</property>
     <property name="gravity">center</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="empty1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="empty2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Please choose a task</property>
@@ -27,11 +27,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="empty3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="empty4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Tasks</property>
@@ -77,7 +77,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSeparator">
+          <object class="GtkSeparator" id="empty5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">5</property>
@@ -104,7 +104,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSeparator">
+          <object class="GtkSeparator" id="empty6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">5</property>
@@ -117,7 +117,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButtonBox">
+          <object class="GtkButtonBox" id="empty7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="homogeneous">True</property>
@@ -170,7 +170,7 @@
     <property name="gravity">center</property>
     <property name="transient_for">wChangeTask</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="empty8">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_top">2</property>
@@ -178,7 +178,7 @@
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="empty9">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Fill at least description</property>
@@ -190,7 +190,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="empty10">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -224,11 +224,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="empty11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="empty12">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">       Project </property>
@@ -265,7 +265,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButtonBox">
+          <object class="GtkButtonBox" id="empty12">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">5</property>
