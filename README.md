@@ -115,7 +115,7 @@ If you wish to track every task of taskwarrior in timewarrior you need to:
  So just do:
  
  ```bash
- cd .timewarrior/extensions/
+ cd ~/.timewarrior/extensions/
  wget https://raw.githubusercontent.com/liloman/warriors/master/work.py
  chmod u+x work.py
  ```
