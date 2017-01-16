@@ -12,13 +12,125 @@ A previous "week" hack project.
 ###Dependencies (python based)
 
 1. pip install tasklib --user
-2. apt-get/dnf/whatever install python-dbus/dbus-python/... (if not already...)
-3. taskwarrior and timewarrior
+2. taskwarrior and timewarrior
+3. If you are a newcomer to taskwarrior and/or timewarrior, just execute task and/or timew commands and answer yes when asked to create the db
+
+### Why timewarrior?
+
+Because you the objective is track all your workflow and nothing better for that purpose than the newcomer taskwarrior brother timewarrior. :)
+
+To install it:
+```bash
+sudo dnf/apt-get/whatever install build-essential cmake 
+git clone --recursive https://git.tasktools.org/scm/tm/timew.git timew.git
+cd timew.git
+git checkout master 
+cmake -DCMAKE_BUILD_TYPE=release .
+make
+sudo make install
+```
+In order to track every task of taskwarrior in timewarrior you need to:
+
+1. Copy/link [this taskwarrior hook](https://github.com/liloman/warriors/blob/master/on-modify.timewarrior) into ~/.task/hooks directory 
+
+So it will be: 
+
+```bash
+cd ~/.task/hooks
+wget https://raw.githubusercontent.com/liloman/warriors/master/on-modify.timewarrior
+chmod u+x on-modify.timewarrior
+```
+
+And for now on each time you start/stop a task it will be tracked with timewarrior unless it contains the +notimew tag. ;) 
+
+2. To stop tracking when you logout/shutdown (I recommend it), you have to copy/link a [a systemd user unit](https://github.com/liloman/dotfiles/blob/master/systemd/.config/systemd/user/on-logout.service)
+
+So as simple as: 
+
+```bash
+cd ~/.config/systemd/user/ || mkdir -p ~/.config/systemd/user/
+wget https://raw.githubusercontent.com/liloman/dotfiles/master/systemd/.config/systemd/user/on-logout.service
+systemctl --user daemon-reload
+systemctl --user start on-logout.service
+```
+
+3. Everytime that there's a pomodoro timeout the app automatically track the time with timewarrior so you don't have to worry about that ;)
+
+4. If you want to track also the time the PC is off (I don't recommend it if you have several PCs and sync your tasks among them) you can execute after every log [this script](https://github.com/liloman/warriors/blob/master/last-boots.sh)
+
+So it will be: 
+
+```bash
+cd your-autostart-dir/xinit/systemd/whatever/...
+wget https://raw.githubusercontent.com/liloman/warriors/master/last-boots.sh
+chmod u+x last-boots.sh
+
+```
+
+5. If you want (I recommend it) to know how much time have you work today/this week/month/whatever, you need to create a new timewarrior report like [this](https://github.com/liloman/warriors/blob/master/work.py)
+
+So just do:
+
+```bash
+cd .timewarrior/extensions/
+wget https://raw.githubusercontent.com/liloman/warriors/master/work.py
+chmod u+x work.py
+```
+This report will show you all your work except the tasks with +nowork tag. ;)
+
+
+You can create these two aliases for cozyness in your ~/.bashrc/whatever I guarantee that You will use them ;)
+
+
+```bash
+alias twt='timew work today'
+alias tww='timew work :week'
+```
+
+6. Start enjoying timewarrior!. :) 
+
+
+How much have I been working today? 
+
+```bash
+prompt>twt
+Total by Tag from 2017-01-15 23:00:00 - 2017-01-16 09:59:28 (sorted by time)
+
+Tag                                                Total
+----------------------------------       ---------------
+
+More stuff / pro:stuff                   0 days, 2:14:00
+Doing demo / pro:dev.demo                0 days, 3:04:49
+                                        ----------------                   
+Total                                    0 days, 5:18:49
+
+```
+
+Umm, 5:18 hours. Niiiiiiiiiiice. 
+
+So no remorse of conscience for today. ;)
+
+Of course you could know how much have you worked this week for a project for example:
+
+```bash
+prompt>tww pro:awesome
+Total by Tag from 2017-01-08 23:00:00 - 2017-01-15 23:00:00 (sorted by time)
+
+Tag                                                Total
+----------------------------------       ---------------
+
+Fixing that bugs 1/ pro:awesome          0 days, 0:14:00
+Fixing that bugs 2 / pro:awesome         1 days, 2:14:00
+Writing docs / +docs / pro:awesome       3 days, 3:04:49
+                                        ----------------                   
+Total                                    4 days, 5:32:49
+
+```
 
 
 ###Why yet another pomodoro app?
 
-There isn't anything with taskwarrior alike for linux AFAIK.  :o:
+There isn't anything alike for linux AFAIK.  
 
 ###Screenshots
 
@@ -37,7 +149,7 @@ Trayicon:
 
 ![Paused with menu](images/screenshots/paused.png "Paused with menu")
 
-![Stopped](images/screenshots/stopped.png "Stopped")
+![All icons](images/screenshots/all-icons.png "All icons")
 
 
 ![Change Task](images/screenshots/changeTask.png "Change task")
@@ -80,4 +192,4 @@ Minimalistic implementation with FSM (Finite State Machine) and some dbus nicene
 
 ###FIXED
 
-1. ~~nothing for now~~
+1. ~~Linux mint issues~~
