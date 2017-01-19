@@ -1,38 +1,54 @@
 
+[ ![PomodoroTasks2 in copr](https://copr.fedorainfracloud.org/coprs/liloman/githubs/package/pomodoroTasks2/status_image/last_build.png "PomodoroTasks2 in copr")](https://copr.fedorainfracloud.org/coprs/liloman/githubs/package/pomodoroTasks2)
+
 Don't make any excuse anymore to not use the [Pomodoro Technique wikipedia](https://en.wikipedia.org/wiki/Pomodoro_Technique) or [The Pomodoro Technique ](technique.pdf)!
 
 Pomodoro technique allows you to concentrate on the current task and take short breaks meanwhile works.
 If you get that and join it with a task manager alike taskwarrior (or any other) you can have a complete workflow, accounting the time spend on any task meanwhile you take the proper rests for your brain, body, life and eyes. :)
 
-A previous "week" hack project.
-
 
 Table of Contents
 =================
 
-  * [INSTALL](#INSTALL)
-     * [1. Taskwarrior dependencies (python based)](#1-taskwarrior-dependencies-python-based)
-     * [2. Timewarrior](#2-timewarrior)
-     * [3. Pomodoro](#3-pomodoro)
-  * [Why timewarrior?](#why-timewarrior)
-  * [Screenshots](#screenshots)
-  * [Spec](#spec)
-  * [TODO](#todo)
-  * [FIXED](#fixed)
-
+* [Table of Contents](#table-of-contents)
+ * [INSTALL](#install)
+		* [Packages](#packages)
+		* [Manual](#manual)
+			 * [1. Taskwarrior dependencies (python based)](#1-taskwarrior-dependencies-python-based)
+			 * [2. Timewarrior](#2-timewarrior)
+			 * [3. Pomodoro](#3-pomodoro)
+ * [Why timewarrior?](#why-timewarrior)
+ * [Screenshots](#screenshots)
+ * [Spec](#spec)
+ * [TODO](#todo)
+ * [FIXED](#fixed)
 
 
 ###INSTALL 
 
-####1. Taskwarrior dependencies (python based)
+####Packages
+
+1. Fedora 24/25 x86:
+
+```bash
+dnf copr enable liloman/githubs
+dnf install pomodoroTasks2
+```
+
+Packages for Debian/Ubuntu/Slack/... to come. 
+
+
+####Manual
+
+#####1. Taskwarrior dependencies (python based)
 
 ```bash
 pip install tasklib --user
 sudo dnf/apt-get/whatever install taskwarrior/task/whatever
-task (answer yes to create the database)
+task <<< yes
 ```
 
-#### 2. Timewarrior
+##### 2. Timewarrior
 
 ```bash
 sudo dnf/apt-get/whatever install build-essential cmake 
@@ -42,10 +58,10 @@ git checkout master
 cmake -DCMAKE_BUILD_TYPE=release .
 make
 sudo make install
-timew (answer yes to create the database)
+timew <<< yes
 ```
 
-####3. Pomodoro
+#####3. Pomodoro
 
 ```bash
 git clone https://github.com/liloman/pomodoroTasks2
