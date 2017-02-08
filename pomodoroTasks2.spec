@@ -53,7 +53,7 @@ for user in /home/*; do
    su - ${user##*/} -c 'timew <<< yes' &> /dev/null || :
 done
 if [[ -d /usr/share/bash-completion/completions/ ]]; then
-    cp extras/pomodoro-client.bash_autocompletion /usr/share/bash-completion/completions/pomodoro-client.py
+    cp %{_datadir}/%{name}/extras/pomodoro-client.bash_autocompletion /usr/share/bash-completion/completions/pomodoro-client.py
 fi
 #install user hooks
 for user in /home/*; do

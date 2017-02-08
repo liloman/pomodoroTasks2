@@ -10,15 +10,15 @@ install() {
 
     echo "Creating taskwarrior hook for on-modify.timewarrior"
     create ~/.task/hooks
-    ln -sv $datadir/extras/on-modify.timewarrior ~/.task/hooks/
+    ln -svf $datadir/extras/on-modify.timewarrior ~/.task/hooks/
 
     echo "Creating timewarrior work report"
     create ~/.timewarrior/extensions/
-    ln -sv $datadir/extras/work.py ~/.timewarrior/extensions/
+    ln -svf $datadir/extras/work.py ~/.timewarrior/extensions/
 
     echo "Creating systemd user service to stop current task on logout"
-    create ~/.config/systemd/user/ ; cd ~/.config/systemd/user/
-    cp -v $datadir/extras/stop-task-on-logout.service .
+    create ~/.config/systemd/user/ 
+    cp -v $datadir/extras/stop-task-on-logout.service  ~/.config/systemd/user/
     systemctl --user daemon-reload
     systemctl --user start stop-task-on-logout.service
 }
