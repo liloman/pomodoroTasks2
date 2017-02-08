@@ -286,9 +286,9 @@ class Pomodoro(dbus.service.Object):
             systray_bus = dbus.SessionBus()
             systray_bus = systray_bus.get_object('org.liloman.pomodoro.systray', "/systray")
             interface_systray = dbus.Interface(systray_bus, "org.liloman.pomodoro.systrayInterface")
-            interface_systray.quit()
+            interface_systray.do_quit()
         except:
-            # print "not systray found"
+            # print "systray not found"
             return 
 
     @dbus.service.method("org.liloman.pomodoroInterface", in_signature='', out_signature='as')
@@ -299,11 +299,13 @@ class Pomodoro(dbus.service.Object):
         active.done()
         return ["ok"]
 
-    @dbus.service.method("org.liloman.pomodoroInterface", in_signature='', out_signature='')
-    def quit(self):
+    @dbus.service.method("org.liloman.pomodoroInterface", in_signature='b', out_signature='')
+    def do_quit(self,close_systray):
         #stop timer
         self.timer.cancel()
-        self.close_systray()
+        #close systray 
+        if close_systray: 
+            self.close_systray()
         # Exit daemon
         loop.quit()
 

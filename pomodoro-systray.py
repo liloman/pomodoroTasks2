@@ -43,7 +43,7 @@ class PomodoroApp(dbus.service.Object):
 
     # to be called from the daemon 
     @dbus.service.method("org.liloman.pomodoro.systrayInterface", in_signature='', out_signature='')
-    def quit(self):
+    def do_quit(self):
         Gtk.main_quit()
 
     # a{ss} = dictionary(dbus) of keys=s and values=s
@@ -198,7 +198,8 @@ class PomodoroApp(dbus.service.Object):
             threading.Thread(target=self._toggle_continuous,args=[]).start()
 
         def _quit_daemon():
-            self.interface.quit()
+            #don't try to close the systray
+            self.interface.do_quit(False)
 
         def quit_daemon():
             threading.Thread(target=_quit_daemon,args=[]).start()

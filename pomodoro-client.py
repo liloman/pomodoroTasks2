@@ -105,7 +105,8 @@ except:
     sys.exit(1)
 
 if com == "quit":
-    interface.quit()
+    #close systray as well
+    interface.do_quit(True)
     print "pomodoro daemon halted"
 elif com == "systray":
     # use busConnection better than bus = dbus.SessionBus() to work with systemd for example
