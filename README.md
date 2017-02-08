@@ -1,7 +1,7 @@
 
 [ ![PomodoroTasks2 in copr](https://copr.fedorainfracloud.org/coprs/liloman/githubs/package/pomodoroTasks2/status_image/last_build.png "PomodoroTasks2 in copr")](https://copr.fedorainfracloud.org/coprs/liloman/githubs/package/pomodoroTasks2)
 
-Don't make any excuse anymore to not use the [Pomodoro Technique wikipedia](https://en.wikipedia.org/wiki/Pomodoro_Technique) or [The Pomodoro Technique ](technique.pdf)!
+Don't make any excuse anymore to not use the [Pomodoro Technique wikipedia](https://en.wikipedia.org/wiki/Pomodoro_Technique) or [The Pomodoro Technique ](extras/technique.pdf)!
 
 Pomodoro technique allows you to concentrate on the current task and take short breaks meanwhile works.
 If you get that and join it with a task manager alike taskwarrior (or any other) you can have a complete workflow, accounting the time spend on any task meanwhile you take the proper rests for your brain, body, life and eyes. :)

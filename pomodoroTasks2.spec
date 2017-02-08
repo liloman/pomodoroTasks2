@@ -32,7 +32,7 @@ exit 0
 %install
 
 mkdir -p %{buildroot}%{_defaultdocdir}/%{name}
-cp -a *.md CHANGELOG technique.pdf %{buildroot}%{_defaultdocdir}/%{name}
+cp -a *.md CHANGELOG extras/technique.pdf %{buildroot}%{_defaultdocdir}/%{name}
 mkdir -p  %{buildroot}%{_datadir}/%{name}
 cp -a pomodoro*.py do_timeout.py images gui test extras %{buildroot}%{_datadir}/%{name}
 
@@ -53,7 +53,7 @@ for user in /home/*; do
    su - ${user##*/} -c 'timew <<< yes' &> /dev/null || :
 done
 if [[ -d /usr/share/bash-completion/completions/ ]]; then
-    cp pomodoro-client.bash_autocompletion /usr/share/bash-completion/completions/pomodoro-client.py
+    cp extras/pomodoro-client.bash_autocompletion /usr/share/bash-completion/completions/pomodoro-client.py
 fi
 #install user hooks
 for user in /home/*; do
