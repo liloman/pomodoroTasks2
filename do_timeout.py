@@ -32,12 +32,13 @@ def update_reminders():
     i=0
     for task in tw.tasks.filter('+READY +reminder'):
         # for each box 
-        for box in lsbReminders.get_row_at_index(i).get_children():
-            #get the done checkbox
-            if box.get_children()[2].get_active():
-                #mark as done the reminder 
-                #dont call the hook and track with timew?
-                task.done()
+        if lsbReminders.get_row_at_index(i):
+            for box in lsbReminders.get_row_at_index(i).get_children():
+                #get the done checkbox
+                if box.get_children()[2].get_active():
+                    #mark as done the reminder 
+                    #dont call the hook and track with timew?
+                    task.done()
         i+=1
 
 def addReminder(desc,date):
