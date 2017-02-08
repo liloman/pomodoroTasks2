@@ -10,18 +10,18 @@ If you get that and join it with a task manager alike taskwarrior (or any other)
 Table of Contents
 =================
 
-* [Table of Contents](#table-of-contents)
- * [INSTALL](#install)
-		* [Packages](#packages)
-		* [Manual](#manual)
-			 * [1. Taskwarrior dependencies (python based)](#1-taskwarrior-dependencies-python-based)
-			 * [2. Timewarrior](#2-timewarrior)
-			 * [3. Pomodoro](#3-pomodoro)
- * [Why timewarrior?](#why-timewarrior)
- * [Screenshots](#screenshots)
- * [Spec](#spec)
- * [TODO](#todo)
- * [FIXED](#fixed)
+* [INSTALL](#install)
+    * [Packages](#packages)
+    * [Manual](#manual)
+       * [1. Taskwarrior dependencies (python based)](#1-taskwarrior-dependencies-python-based)
+       * [2. Timewarrior](#2-timewarrior)
+       * [3. PomodoroTasks2](#3-pomodorotasks2)
+* [Why do I need timewarrior?](#why-do-i-need-timewarrior)
+* [Reminders](#reminders)
+* [Screenshots](#screenshots)
+* [Spec](#spec)
+* [TODO](#todo)
+* [FIXED](#fixed)
 
 
 ###INSTALL 
@@ -61,7 +61,7 @@ sudo make install
 timew <<< yes
 ```
 
-#####3. Pomodoro
+#####3. PomodoroTasks2
 
 ```bash
 git clone https://github.com/liloman/pomodoroTasks2
@@ -69,7 +69,7 @@ cd pomodoroTasks2/
 ./pomodoro-daemon.py
 ```
 
-You can customize the working time and the break times (short and long), just exporting a few ENV variables on your ~/.bashrc/whatever.
+You can customize the working time and the break times (short and long), just exporting a few ENV variables in your ~/.bashrc.
 
 ```bash
 #default pomodoro session (minutes)
@@ -84,38 +84,41 @@ export POMODORO_LTIMEOUT=15
 So just launch the pomodoro-daemon.py and you are ready to go, feel free to add it in ~/.local/bin,autostart,systemd,... :)
 
 
-### Why timewarrior?
+### Why do I need timewarrior?
 
-Because you the objective is track all your workflow and nothing better for that purpose than the newcomer taskwarrior brother timewarrior. :)
+Because you the objective is track all your workflow and nothing better for that purpose than the newcomer and taskwarrior brother timewarrior. :)
 
 If you wish to track every task of taskwarrior in timewarrior you need to:
 
-1. Copy/link [this taskwarrior hook](https://github.com/liloman/warriors/blob/master/on-modify.timewarrior) into ~/.task/hooks directory 
+1. Execute the extras/prepare_hooks.sh script:
 
  So it will be: 
 
  ```bash
- cd ~/.task/hooks
- wget https://raw.githubusercontent.com/liloman/warriors/master/on-modify.timewarrior
- chmod u+x on-modify.timewarrior
+ git clone https://github.com/liloman/pomodoroTasks2
+ cd pomodoroTasks2/
+ ./extras/prepare_hooks.sh install .
  ```
 
- And for now on each time you start/stop a task it will be tracked with timewarrior unless it contains the +notimew tag. ;) 
+ And for now on: 
+ a. Each time you start/stop a task it will be tracked with timewarrior unless it contains the +notimew tag. ;) 
 
-2. To stop tracking when you logout/shutdown (I recommend it), you have to copy/link a [a systemd user unit](https://github.com/liloman/dotfiles/blob/master/systemd/.config/systemd/user/on-logout.service)
+ b. Timewarrior will stop tracking on logout/shutdown
 
- So as simple as: 
+ c. Everytime that there's a pomodoro timeout the app automatically track  it
+
+ d. You have a new timewarrior report for your work (everything within a +nowork tag) ;)
+
+
+2. You can create these two aliases for cozyness in your ~/.bashrc I can guarantee that you will use them ;)
+ 
  
  ```bash
- cd ~/.config/systemd/user/ || mkdir -p ~/.config/systemd/user/
- wget https://raw.githubusercontent.com/liloman/dotfiles/master/systemd/.config/systemd/user/on-logout.service
- systemctl --user daemon-reload
- systemctl --user start on-logout.service
+ alias twt='timew work today'
+ alias tww='timew work :week'
  ```
 
-3. Everytime that there's a pomodoro timeout the app automatically track the time with timewarrior so you don't have to worry about that ;)
-
-4. If you want to track also the time the PC is off (I don't recommend it if you have several PCs and sync your tasks among them) you can execute after every log [this script](https://github.com/liloman/warriors/blob/master/last-boots.sh)
+3. If you want to track also the time the PC is off (I don't recommend it if you have several PCs and sync your tasks among them) you can execute after every log [this script](https://github.com/liloman/warriors/blob/master/last-boots.sh)
 
  So it will be: 
  
@@ -125,28 +128,8 @@ If you wish to track every task of taskwarrior in timewarrior you need to:
  chmod u+x last-boots.sh
  
  ```
-
-5. If you want (I recommend it) to know how much time have you work today/this week/month/whatever, you need to create a new timewarrior report like [this](https://github.com/liloman/warriors/blob/master/work.py)
-
- So just do:
  
- ```bash
- cd ~/.timewarrior/extensions/
- wget https://raw.githubusercontent.com/liloman/warriors/master/work.py
- chmod u+x work.py
- ```
- This report will show you all your work except the tasks with +nowork tag. ;)
-
-
- You can create these two aliases for cozyness in your ~/.bashrc/whatever I can guarantee that you will use them ;)
- 
- 
- ```bash
- alias twt='timew work today'
- alias tww='timew work :week'
- ```
- 
-6. Start enjoying timewarrior!. :) 
+4. Start enjoying timewarrior!. :) 
 
 
  How much have I been working today? 
@@ -185,6 +168,58 @@ If you wish to track every task of taskwarrior in timewarrior you need to:
  Total                                    4 days, 5:32:49
  
  ```
+
+###Reminders 
+
+It's another functionality included into pomodoroTasks2.
+
+
+My use case is for that kind of tasks that you need to be reminded about and most time even on advance.  So I use it to remember birthdays, due times or important tasks for this week in conclusión as a tasks calendar. :)
+
+It's based on taskwarrior recurrence tasks and basically you just need to create a task with the +reminder tag and it will be displayed on timeout as a remind for your rewarded spare time. ;)
+
+I include the script I use myself to create them or you can use whatever you want just include a +reminder tag on any task and it'll be show up on timeout if it's on pending status.
+
+My script can create 3 types of reminders:
+
+1. Recurrent (ex: birthdate): You create a birthdate and set to be shown with x days on advance until its due date
+
+2. NonRecurrent(from date): Create a task for the day/month/year and set it to be show x days on advance until its due date
+
+3. Inmediate(from today!): Create a task to be shown from now on or after x days until it's done
+
+
+If you installed the package it will add a new command to /usr/bin/ otherwise you have to copy it like:
+
+ ```bash
+git clone https://github.com/liloman/pomodoroTasks2
+cd pomodoroTasks2/extras
+cp add-reminder.sh wherever-you-want-it
+ ```
+
+Workflow to create the example:
+
+ ```bash
+$add-reminder.sh
+Select the type of reminder
+1) Recurrent (ex: birthdate)  3) Inmediate(from today!)
+2) NonRecurrent(from date)
+#? 3
+Description:Example reminder for screenshot!
+task add 'Example reminder for screenshot!' pro:tasks due:someday wait:today until:due+1d recur: +reminder  rc.dateformat=D/M/Y
+Are you sure?
+1) Yes
+2) No
+#? 1
+Created task 35.
+ ```
+
+And here it's the result:
+
+![Showing reminder](images/screenshots/reminder.png "Showing reminder")
+
+When you mark the task as done or check the checkbox it will be disappear from the timeout splash screen.
+
 
 ###Screenshots
 
@@ -228,8 +263,11 @@ Minimalistic implementation with FSM (Finite State Machine) and some dbus nicene
 - [x] dbus 
 - [x] Timewarrior integration to track the complete lifespan of your computer. ;)
 - [x] Dont wait a minute to refresh the trayicon when used the cli
+- [x] Script to install/uinstall hooks
+- [x] Explain/include reminders
 - [ ] Unit testing \(fix travis install ... \)
 
 ###FIXED
 
 1. ~~Linux mint issues~~
+2. ~~Eliminated cycle when closed app from the sysicon~~

@@ -19,8 +19,8 @@ Requires:	python-gobject
 
 %description
 
-Pomodoro technique allows you to concentrate on the current task and take short breaks meanwhile works. If you join it with a task manager alike taskwarrior you can have a complete workflow, accounting the time spend on any task meanwhile you take the proper rests for your brain, body, life and eyes. :)
-All your work is timetracked with timewarrior so you can view where have you been working anytime easily.
+Pomodoro technique allows you to concentrate on the current task and take short breaks meanwhile works. If you join it with a task manager alike taskwarrior you can have a complete workflow, accounting the time spend on any task meanwhile you take the proper rests for your brain, body (eyes in special), and life. :)
+All your work is timetracked with timewarrior so you can view what have you been working anytime easily.
 
 
 %prep 
@@ -34,7 +34,7 @@ exit 0
 mkdir -p %{buildroot}%{_defaultdocdir}/%{name}
 cp -a *.md CHANGELOG technique.pdf %{buildroot}%{_defaultdocdir}/%{name}
 mkdir -p  %{buildroot}%{_datadir}/%{name}
-cp -a pomodoro*.py do_timeout.py images gui test %{buildroot}%{_datadir}/%{name}
+cp -a pomodoro*.py do_timeout.py images gui test extras %{buildroot}%{_datadir}/%{name}
 
 
 %files
@@ -52,11 +52,29 @@ for user in /home/*; do
    su - ${user##*/} -c 'task <<< yes' &> /dev/null || :
    su - ${user##*/} -c 'timew <<< yes' &> /dev/null || :
 done
-# echo "linking pomodoro binaries"
-ln -sf %{_datadir}/%{name}/pomodoro* %{_bindir} 
+if [[ -d /usr/share/bash-completion/completions/ ]]; then
+    cp pomodoro-client.bash_autocompletion /usr/share/bash-completion/completions/pomodoro-client.py
+fi
+#install user hooks
+for user in /home/*; do
+   su - ${user##*/} -c '%{_datadir}/%{name}/extras/prepare_hooks.sh install' &> /dev/null || :
+done
+
+#link pomodoro binaries to _bindir (/usr/bin/)
+ln -sf %{_datadir}/%{name}/pomodoro-*.py %{_bindir} 
+#link add-reminder.sh to _bindir
+ln -sf %{_datadir}/%{name}/extras/add-reminder.sh %{_bindir} 
 
 %postun
+#remove python tasklib 
 /usr/bin/pip uninstall tasklib -qy || :
 #remove symlinks
-rm -f /usr/bin/pomodoro-* || :
+rm -f /usr/bin/pomodoro-*.py /usr/bin/add-reminder.sh || :
+#remove bash autocompletion
+rm -f /usr/share/bash-completion/completions/pomodoro-client.py || :
+#remove user hooks
+for user in /home/*; do
+   su - ${user##*/} -c '%{_datadir}/%{name}/extras/prepare_hooks.sh uninstall' &> /dev/null || :
+done
+
 

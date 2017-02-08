@@ -1,0 +1,10 @@
+
+[Unit]
+Description=Stop current taskwarrior task on logout
+
+[Service]
+Type=oneshot
+ExecStart=
+ExecStop=/usr/bin/task +ACTIVE stop
+RemainAfterExit=yes
+
