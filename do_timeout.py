@@ -35,7 +35,8 @@ def update_reminders():
         for box in lsbReminders.get_row_at_index(i).get_children():
             #get the done checkbox
             if box.get_children()[2].get_active():
-                #mark as done the reminder
+                #mark as done the reminder 
+                #dont call the hook and track with timew?
                 task.done()
         i+=1
 
