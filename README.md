@@ -35,8 +35,7 @@ dnf copr enable liloman/githubs
 dnf install pomodoroTasks2
 ```
 
-Packages for Debian/Ubuntu/Slack/... to come. 
-
+This will install all the timewarrior stuff and set the enviroment properly.
 
 ####Manual
 
