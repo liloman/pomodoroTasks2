@@ -120,5 +120,5 @@ elif com == "do_start":
     dic = dbus.Dictionary({'uuid': sys.argv[2] , 'resume': 'No'  } , signature = 'ss' )
     print ("reply:"+interface.do_start(dic)[0])
 else:
-    print (interface.do_fsm(com)[0])
+    print(u''.join(interface.do_fsm(com)[0]).encode('utf-8').strip())
 
