@@ -265,6 +265,7 @@ Minimalistic implementation with FSM (Finite State Machine) and some dbus nicene
 - [x] Dont wait a minute to refresh the trayicon when used the cli
 - [x] Script to install/uinstall hooks
 - [x] Explain/include reminders
+- [ ] Add packages for Ubuntu/Debian/Arch/...
 - [ ] Unit testing \(fix travis install ... \)
 
 ###FIXED
