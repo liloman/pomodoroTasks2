@@ -121,7 +121,7 @@ class TestPomodoro(unittest.TestCase):
         self.new_task.delete()
         # remove the directory
         shutil.rmtree('.task/')
-        interface.quit()
+        interface.do_quit(False)
 
 if __name__ == '__main__':
     Popen(["python", "../pomodoro-daemon.py","test/.task","testing"]) 
