@@ -20,7 +20,8 @@ install() {
     create ~/.config/systemd/user/ 
     cp -v $datadir/extras/stop-task-on-logout.service  ~/.config/systemd/user/
     systemctl --user daemon-reload
-    systemctl --user start stop-task-on-logout.service
+    systemctl --user enable stop-task-on-logout.service
+    systemctl --user start  stop-task-on-logout.service
 }
 
 uninstall() {

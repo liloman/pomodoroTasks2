@@ -8,3 +8,5 @@ ExecStart=
 ExecStop=/usr/bin/task +ACTIVE stop
 RemainAfterExit=yes
 
+[Install]
+WantedBy=dbus.socket
