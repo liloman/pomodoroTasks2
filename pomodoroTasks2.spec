@@ -55,10 +55,15 @@ done
 if [[ -d /usr/share/bash-completion/completions/ ]]; then
     cp %{_datadir}/%{name}/extras/pomodoro-client.bash_autocompletion /usr/share/bash-completion/completions/pomodoro-client.py
 fi
+
+#Create systemd service to stop current task on sleep
+cp %{_datadir}/%{name}/extras/sleep@.service /etc/systemd/system/
 #install user hooks
 for user in /home/*; do
    su - ${user##*/} -c '%{_datadir}/%{name}/extras/prepare_hooks.sh install' &> /dev/null || :
+   systemctl enable sleep@${user##*/}
 done
+systemctl daemon-reload
 
 #link pomodoro binaries to _bindir (/usr/bin/)
 ln -sf %{_datadir}/%{name}/pomodoro-*.py %{_bindir} 
@@ -75,6 +80,8 @@ rm -f /usr/share/bash-completion/completions/pomodoro-client.py || :
 #remove user hooks
 for user in /home/*; do
    su - ${user##*/} -c '%{_datadir}/%{name}/extras/prepare_hooks.sh uninstall' &> /dev/null || :
+   systemctl stop sleep@${user##*/}
+   systemctl disable sleep@${user##*/}
 done
 
 

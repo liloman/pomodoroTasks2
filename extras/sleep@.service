@@ -1,0 +1,15 @@
+[Unit]
+Description=Stop current taskwarrior task on sleep
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+User=%I
+Type=oneshot
+ExecStart=/usr/bin/pomodoro-client.py stop
+ExecStop=/usr/bin/pomodoro-client.py start
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sleep.target
+
