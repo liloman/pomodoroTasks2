@@ -32,14 +32,14 @@ add-reminder() {
     fi
 
     if [[ $opt == r* ]]; then
-        read  -p "Active after n days (empty for $default_days):"  wait_days
+        read  -p "Active before n days of due date (empty for $default_days):"  wait_days
         [[ -z $wait_days ]] && wait_days=$default_days
         wait_days="due-${wait_days}d"
         read  -p "Recurrence (empty for 1y):" recurrence 
         [[ -z $recurrence ]] && recurrence=1years
     elif [[ $opt == n* ]]; then
         if [[ $due != today ]]; then
-            read  -p "Active after n days (empty for no wait):"  wait_days
+            read  -p "Active before n days of due date (empty for no wait):"  wait_days
         fi
         [[ -z $wait_days ]] && wait_days=today || wait_days="due-${wait_days}d"
     else #inmediate so no due date
