@@ -14,6 +14,7 @@ import sys
 
 # For dbus
 import dbus.service
+import dbus.exceptions
 import dbus.mainloop.glib
 
 dirname, filename = os.path.split(os.path.realpath(__file__))
@@ -74,8 +75,12 @@ class Pomodoro(dbus.service.Object):
 
     def __init__(self, rc = '~/.task'):
         self.tw = TaskWarrior(data_location=rc, create=True)
-        name = dbus.service.BusName(self.bus_name, bus=dbus.SessionBus(),do_not_queue=True, replace_existing=False, allow_replacement=False )
-        dbus.service.Object.__init__(self, name, '/daemon')
+        try:
+            name = dbus.service.BusName(self.bus_name, bus=dbus.SessionBus(),do_not_queue=True, replace_existing=False, allow_replacement=False )
+            dbus.service.Object.__init__(self, name, '/daemon')
+        except dbus.exceptions.NameExistsException:
+            print("Daemon is already running.")
+            sys.exit(0)
 
     #get active task
     def get_active_task(self):
