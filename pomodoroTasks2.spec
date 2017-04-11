@@ -1,5 +1,5 @@
 Name:		pomodoroTasks2
-Version:	0.4
+Version:	0.5
 Release:	1%{?dist}
 Summary:  Graphical trayicon to pomodoro with taskwarrior/timewarrior
 Group:		User Interface/X
