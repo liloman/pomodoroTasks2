@@ -6,27 +6,25 @@ Don't make any excuse anymore to not use the [Pomodoro Technique wikipedia](http
 Pomodoro technique allows you to concentrate on the current task and take short breaks meanwhile works.
 If you get that and join it with a task manager alike taskwarrior (or any other) you can have a complete workflow, accounting the time spend on any task meanwhile you take the proper rests for your brain, body, life and eyes. :)
 
-
 Table of Contents
 =================
 
-* [INSTALL](#install)
-    * [Packages](#packages)
-    * [Manual](#manual)
-       * [1. Taskwarrior dependencies (python based)](#1-taskwarrior-dependencies-python-based)
-       * [2. Timewarrior](#2-timewarrior)
-       * [3. PomodoroTasks2](#3-pomodorotasks2)
-* [Why do I need timewarrior?](#why-do-i-need-timewarrior)
-* [Reminders](#reminders)
-* [Screenshots](#screenshots)
-* [Spec](#spec)
-* [TODO](#todo)
-* [FIXED](#fixed)
+   * [Table of Contents](#table-of-contents)
+   * [INSTALL](#install)
+      * [Packages](#packages)
+      * [Manual](#manual)
+   * [Why do I need timewarrior?](#why-do-i-need-timewarrior)
+   * [Reminders](#reminders)
+   * [Screenshots](#screenshots)
+   * [Spec](#spec)
+   * [TODO](#todo)
+   * [FIXED](#fixed)
 
+INSTALL
+=================
 
-###INSTALL 
-
-####Packages
+Packages
+--------------
 
 1. Fedora 24/25 x86:
 
@@ -37,9 +35,10 @@ dnf install pomodoroTasks2
 
 This will install all the timewarrior stuff and set the enviroment properly.
 
-####Manual
+Manual
+--------------
 
-#####1. Taskwarrior dependencies (python based)
+1. Taskwarrior dependencies (python based)
 
 ```bash
 pip install tasklib --user
@@ -47,7 +46,7 @@ sudo dnf/apt-get/whatever install taskwarrior/task/whatever
 task <<< yes
 ```
 
-##### 2. Timewarrior
+2. Timewarrior
 
 ```bash
 sudo dnf/apt-get/whatever install build-essential cmake 
@@ -60,7 +59,7 @@ sudo make install
 timew <<< yes
 ```
 
-#####3. PomodoroTasks2
+3. PomodoroTasks2
 
 ```bash
 git clone https://github.com/liloman/pomodoroTasks2
@@ -83,7 +82,8 @@ export POMODORO_LTIMEOUT=15
 So just launch the pomodoro-daemon.py and you are ready to go, feel free to add it in ~/.local/bin,autostart,systemd,... :)
 
 
-### Why do I need timewarrior?
+Why do I need timewarrior?
+=================
 
 Because you the objective is track all your workflow and nothing better for that purpose than the newcomer and taskwarrior brother timewarrior. :)
 
@@ -168,7 +168,8 @@ If you wish to track every task of taskwarrior in timewarrior you need to:
  
  ```
 
-###Reminders 
+Reminders 
+=================
 
 It's another functionality included into pomodoroTasks2.
 
@@ -220,7 +221,8 @@ And here it's the result:
 When you mark the task as done or check the checkbox it will be disappear from the timeout splash screen.
 
 
-###Screenshots
+Screenshots
+=================
 
 Relax time:
 
@@ -252,12 +254,14 @@ Add new task:
 
 
 
-###Spec
+Spec
+=================
 
 Minimalistic implementation with FSM (Finite State Machine) and some dbus niceness. :)
 
 
-###TODO
+TODO
+=================
 
 - [x] dbus 
 - [x] Timewarrior integration to track the complete lifespan of your computer. ;)
@@ -267,7 +271,8 @@ Minimalistic implementation with FSM (Finite State Machine) and some dbus nicene
 - [ ] Add packages for Ubuntu/Debian/Arch/...
 - [ ] Unit testing \(fix travis install ... \)
 
-###FIXED
+FIXED
+=================
 
 1. ~~Linux mint issues~~
 2. ~~Eliminated cycle when closed app from the sysicon~~
