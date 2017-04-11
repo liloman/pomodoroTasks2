@@ -88,7 +88,7 @@ else:
             continue
 
         if re.search('dbus-daemon',cmdline):
-            dbus_path=s['DBUS_SESSION_BUS_ADDRESS']
+            dbus_path=re.sub("'", '', s['DBUS_SESSION_BUS_ADDRESS'])
             break
 
 if not dbus_path:
