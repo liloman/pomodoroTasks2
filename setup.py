@@ -4,7 +4,7 @@ from setuptools import setup,find_packages
 setup(
     name="pomodorotasks",
     packages=find_packages(exclude=['test' 'test/*']),
-    install_requires=['tasklib', 'pygobject'],
+    install_requires=['tasklib', 'pygobject', 'dbus-python'],
     entry_points={
         'console_scripts': [
             'pomodorotasks = pomodoro.client:main'
