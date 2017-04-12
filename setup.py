@@ -3,7 +3,7 @@ from setuptools import setup,find_packages
 
 setup(
     name="pomodorotasks",
-    packages=find_packages(),
+    packages=find_packages(exclude=['test' 'test/*']),
     install_requires=['tasklib', 'pygobject'],
     entry_points={
         'console_scripts': [
@@ -14,5 +14,7 @@ setup(
             ]
         },
     include_package_data=True,
-    package_data={'pomodorotasks': ['images/*.png', 'gui/*.glade']}
+    package_data={'pomodorotasks': ['images/*.png', 'gui/*.glade']},
+    test_suite='nose.collector',
+    tests_require=['nose']
     )
