@@ -162,12 +162,40 @@ class PomodoroApp(dbus.service.Object):
             do_start(uuids[id], 'Yes')
             wChangeTask.hide()
 
+        def ShowProject(widget):
+            print ("Show")
+
+        def HideProject(widget):
+            print ("Hide")
+
+        def updatecbChange(widget):
+            cbChange.remove_all()
+            cbChange.append_text('0 -------------- None ------------ ')
+            cbChange.set_active(0)
+            selected = widget.get_label()
+            #fill the combobox
+            for task in self.tw.tasks.pending().filter(project=selected):
+                if not task.active:
+                    task.refresh()
+                    desc=u''.join(task['description']).encode('utf-8').strip() 
+                    proj='None'
+                    if task['project']:
+                        proj=u''.join(task['project']).encode('utf-8').strip() 
+                    line=str(task['id'])+" ["+str(proj)+"]-"+desc
+                    uuids[task['id']]=str(task['uuid'])
+                    cbChange.append_text(line)
+            print ("Update")
+
+
+
         uuids = { 0: '0'}
         builder.add_from_file("gui/change_task.glade")
         wChangeTask = builder.get_object("wChangeTask")
         cbChange    = builder.get_object("cbChange")
         ckbDone     = builder.get_object("ckbDone")
         wAddTask    = builder.get_object("wAddTask")
+        lbProjects  = builder.get_object("lbProjects")
+        lbPriorities= builder.get_object("lbPriorities")
         #buttons
         btAddTask = builder.get_object("btAddTask")
         btAddTask.connect("clicked",showAddTask)
@@ -175,10 +203,54 @@ class PomodoroApp(dbus.service.Object):
         btCancelChangeTask.connect("clicked",closeChangeTask)
         btChange = builder.get_object("btChangeTask")
         btChange.connect("clicked",ChangeTask)
+        btAddProject = builder.get_object("btAddProject")
+        btAddProject.connect("clicked",ShowProject)
         # set the combobox
         cbChange.remove_all()
         cbChange.append_text('0 -------------- None ------------ ')
         cbChange.set_active(0)
+
+        projects = set(['None'])
+        for task in self.tw.tasks.pending():
+            try: # maybe some duplicate or something like that
+                task.refresh()
+                if task['project']: #and "." not in task['project']:
+                    projects.add(u''.join(task['project']).encode('utf-8').strip())
+            except: 
+                next
+
+        #fill the Projects ListBox 
+        for project in sorted(projects):
+            row = Gtk.ListBoxRow()
+            hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
+            row.add(hbox)
+            btProject = Gtk.Button.new_with_label(project)
+            btProject.connect("clicked",updatecbChange)
+            btProject.set_hexpand(True)
+            btProject.set_halign(Gtk.Align.FILL)
+            icon = Gtk.Image.new_from_icon_name("gtk-remove",Gtk.IconSize.BUTTON)
+            btHide = Gtk.Button()
+            btHide.set_image(icon)
+            btHide.connect("clicked",HideProject)
+            hbox.pack_start(btProject, True, True, 0)
+            hbox.pack_start(btHide, False, True, 0)
+            lbProjects.add(row)
+
+        #show it!!
+        lbProjects.show_all()
+
+        #fill the Priorities ListBox
+        for task in ('Urgent', 'Normal','Low','Maybe'):
+            row = Gtk.ListBoxRow()
+            hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
+            row.add(hbox)
+            button = Gtk.Button.new_with_label(task)
+            button.set_hexpand(True)
+            hbox.pack_start(button, False, True, 0)
+            lbPriorities.add(row)
+
+        #show it!!
+        lbPriorities.show_all()
 
         #fill the combobox
         for task in self.tw.tasks.pending():
@@ -191,6 +263,7 @@ class PomodoroApp(dbus.service.Object):
                 line=str(task['id'])+" ["+str(proj)+"]-"+desc
                 uuids[task['id']]=str(task['uuid'])
                 cbChange.append_text(line)
+
         wChangeTask.show()
 
     def right_click_event(self, icon, button, time):
