@@ -162,11 +162,24 @@ class PomodoroApp(dbus.service.Object):
             do_start(uuids[id], 'Yes')
             wChangeTask.hide()
 
-        def ShowProject(widget):
-            print ("Show")
+        def ShowProjects(widget):
+            FillTasksCB()
 
-        def HideProject(widget):
-            print ("Hide")
+        def FillTasksCB():
+            cbChange.remove_all()
+            cbChange.append_text('0 -------------- None ------------ ')
+            cbChange.set_active(0)
+            #fill the combobox
+            for task in self.tw.tasks.pending():
+                if not task.active:
+                    task.refresh()
+                    desc=u''.join(task['description']).encode('utf-8').strip() 
+                    proj='None'
+                    if task['project']:
+                        proj=u''.join(task['project']).encode('utf-8').strip() 
+                    line=str(task['id'])+" ["+str(proj)+"]-"+desc
+                    uuids[task['id']]=str(task['uuid'])
+                    cbChange.append_text(line)
 
         def updatecbChange(widget):
             cbChange.remove_all()
@@ -203,8 +216,24 @@ class PomodoroApp(dbus.service.Object):
         btCancelChangeTask.connect("clicked",closeChangeTask)
         btChange = builder.get_object("btChangeTask")
         btChange.connect("clicked",ChangeTask)
-        btAddProject = builder.get_object("btAddProject")
-        btAddProject.connect("clicked",ShowProject)
+        btResetProjects = builder.get_object("btResetProjects")
+        btResetProjects.connect("clicked", ShowProjects)
+        stbarTask = builder.get_object("stbarTask")
+
+        stbarId=stbarTask.get_context_id("1")
+        stbarTask.push(stbarId,"No current task.")
+        for task in self.tw.tasks.pending():
+            if task.active:
+                task.refresh()
+                desc=u''.join(task['description']).encode('utf-8').strip() 
+                proj='None'
+                if task['project']:
+                    proj=u''.join(task['project']).encode('utf-8').strip() 
+                line="Current task:"+str(task['id'])+" ["+str(proj)+"]-"+desc
+                stbarTask.pop(stbarId)
+                stbarTask.push(stbarId,line)
+        stbarTask.show()
+
         # set the combobox
         cbChange.remove_all()
         cbChange.append_text('0 -------------- None ------------ ')
@@ -220,7 +249,10 @@ class PomodoroApp(dbus.service.Object):
                 next
 
         #fill the Projects ListBox 
+        cur = 1; max = 4;
         for project in sorted(projects):
+            if project == 'None':
+                continue
             row = Gtk.ListBoxRow()
             hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
             row.add(hbox)
@@ -228,13 +260,11 @@ class PomodoroApp(dbus.service.Object):
             btProject.connect("clicked",updatecbChange)
             btProject.set_hexpand(True)
             btProject.set_halign(Gtk.Align.FILL)
-            icon = Gtk.Image.new_from_icon_name("gtk-remove",Gtk.IconSize.BUTTON)
-            btHide = Gtk.Button()
-            btHide.set_image(icon)
-            btHide.connect("clicked",HideProject)
             hbox.pack_start(btProject, True, True, 0)
-            hbox.pack_start(btHide, False, True, 0)
             lbProjects.add(row)
+            if cur == max:
+                break
+            cur+=1;
 
         #show it!!
         lbProjects.show_all()
@@ -252,19 +282,11 @@ class PomodoroApp(dbus.service.Object):
         #show it!!
         lbPriorities.show_all()
 
-        #fill the combobox
-        for task in self.tw.tasks.pending():
-            if not task.active:
-                task.refresh()
-                desc=u''.join(task['description']).encode('utf-8').strip() 
-                proj='None'
-                if task['project']:
-                    proj=u''.join(task['project']).encode('utf-8').strip() 
-                line=str(task['id'])+" ["+str(proj)+"]-"+desc
-                uuids[task['id']]=str(task['uuid'])
-                cbChange.append_text(line)
+        FillTasksCB()
+
 
         wChangeTask.show()
+
 
     def right_click_event(self, icon, button, time):
         def toggle_continuous(ImageMenuItem):
