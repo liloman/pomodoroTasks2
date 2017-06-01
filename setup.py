@@ -7,10 +7,10 @@ setup(
     install_requires=['tasklib', 'pygobject', 'dbus-python'],
     entry_points={
         'console_scripts': [
-            'pomodorotasks = pomodoro.client:main'
+            'pomodoro-tasks-client = pomodoro.client:main'
             ],
         'gui_scripts': [
-            'pomodoro-taskd = pomodorotasks.daemon:main',
+            'pomodoro-tasks-daemon = pomodorotasks.daemon:main',
             ]
         },
     include_package_data=True,
