@@ -199,6 +199,60 @@ class PomodoroApp(dbus.service.Object):
                     cbChange.append_text(line)
             print ("Update")
 
+        def quit(widget):
+            def _quit_daemon(): #don't try to close the systray
+                self.interface.do_quit(False)
+
+            def quit_daemon():
+                threading.Thread(target=_quit_daemon,args=[]).start()
+            quit_daemon()
+            Gtk.main_quit()
+
+        #Fill the Projects ListBox sorted by:
+        # x[0] =  name
+        # x[1] =  last used(modified time)
+        # x[2] =  more pending (count)
+        def fillLBProjects(sort_type):
+            cur = 1; max = 4;
+            for child in lbProjects.get_children():
+                lbProjects.remove(child)
+            for res in sorted(tProjects, key=lambda x: x[sort_type], reverse = True ):
+                project = res[0]
+                row = Gtk.ListBoxRow()
+                hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
+                row.add(hbox)
+                btProject = Gtk.Button.new_with_label(project)
+                btProject.connect("clicked",updatecbChange)
+                btProject.set_hexpand(True)
+                btProject.set_halign(Gtk.Align.FILL)
+                hbox.pack_start(btProject, True, True, 0)
+                lbProjects.add(row)
+                if cur == max:
+                    break
+                cur+=1;
+            #show it!!
+            lbProjects.show_all()
+
+        def sort_by_name(w):
+            fillLBProjects(0)
+
+        def sort_by_time(w):
+            fillLBProjects(1)
+
+        def sort_by_most(w):
+            fillLBProjects(2)
+
+        def fillLBPriorities():
+            for task in ('Urgent', 'Normal','Low','Maybe'):
+                row = Gtk.ListBoxRow()
+                hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
+                row.add(hbox)
+                button = Gtk.Button.new_with_label(task)
+                button.set_hexpand(True)
+                hbox.pack_start(button, False, True, 0)
+                lbPriorities.add(row)
+            #show it!!
+            lbPriorities.show_all()
 
 
         uuids = { 0: '0'}
@@ -218,8 +272,12 @@ class PomodoroApp(dbus.service.Object):
         btChange.connect("clicked",ChangeTask)
         btResetProjects = builder.get_object("btResetProjects")
         btResetProjects.connect("clicked", ShowProjects)
+        btResetPriority = builder.get_object("btResetPriority")
+        btResetPriority.connect("clicked", ShowProjects)
         stbarTask = builder.get_object("stbarTask")
 
+
+        #Set the status bar
         stbarId=stbarTask.get_context_id("1")
         stbarTask.push(stbarId,"No current task.")
         for task in self.tw.tasks.pending():
@@ -234,56 +292,89 @@ class PomodoroApp(dbus.service.Object):
                 stbarTask.push(stbarId,line)
         stbarTask.show()
 
-        # set the combobox
+        # set the tasks combobox
         cbChange.remove_all()
         cbChange.append_text('0 -------------- None ------------ ')
         cbChange.set_active(0)
 
-        projects = set(['None'])
+        #Get all the pending tasks into a dictionary
+        projects = dict()
         for task in self.tw.tasks.pending():
             try: # maybe some duplicate or something like that
                 task.refresh()
-                if task['project']: #and "." not in task['project']:
-                    projects.add(u''.join(task['project']).encode('utf-8').strip())
+                if task['project']: 
+                    project=u''.join(task['project']).encode('utf-8').strip()
+                    modified=task['modified']
+                    count = 1
+                    if projects.has_key(project):
+                         value = projects.get(project)
+                         count = value[1] + 1
+                         if modified < value[0]:
+                             modified = value [0]
+                    projects[project] = [ modified, count ]
             except: 
                 next
+        #Convert dict to a list of tuples
+        tProjects = []
+        for name, value in projects.iteritems():
+            tProjects.append ( (name, value[0], value[1] ) )
 
-        #fill the Projects ListBox 
-        cur = 1; max = 4;
-        for project in sorted(projects):
-            if project == 'None':
-                continue
-            row = Gtk.ListBoxRow()
-            hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
-            row.add(hbox)
-            btProject = Gtk.Button.new_with_label(project)
-            btProject.connect("clicked",updatecbChange)
-            btProject.set_hexpand(True)
-            btProject.set_halign(Gtk.Align.FILL)
-            hbox.pack_start(btProject, True, True, 0)
-            lbProjects.add(row)
-            if cur == max:
-                break
-            cur+=1;
 
-        #show it!!
-        lbProjects.show_all()
 
-        #fill the Priorities ListBox
-        for task in ('Urgent', 'Normal','Low','Maybe'):
-            row = Gtk.ListBoxRow()
-            hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
-            row.add(hbox)
-            button = Gtk.Button.new_with_label(task)
-            button.set_hexpand(True)
-            hbox.pack_start(button, False, True, 0)
-            lbPriorities.add(row)
+        #Set the top menu (no way in Glade without segfault :( )
+        mb = Gtk.MenuBar()
 
-        #show it!!
-        lbPriorities.show_all()
+        appmenu = Gtk.Menu()
+        appm = Gtk.MenuItem.new_with_mnemonic("_App")
+        appm.set_submenu(appmenu)
+       
+        sortmenu = Gtk.Menu()
+        sortby = Gtk.MenuItem.new_with_mnemonic("_Sort Projects")
+        sortby.set_submenu(sortmenu)
 
+
+        time = Gtk.RadioMenuItem("Time")
+        time.set_active(True)
+        time.connect("activate", sort_by_time)
+        sortmenu.append(time)
+        more = Gtk.RadioMenuItem("More pending",group=time)
+        more.connect("activate", sort_by_most)
+        sortmenu.append(more)
+        name = Gtk.RadioMenuItem("Name",group=time)
+        name.connect("activate", sort_by_name)
+        sortmenu.append(name)
+
+        exit = Gtk.MenuItem("Quit daemon")
+        exit.connect("activate", quit)
+        appmenu.append(exit)
+
+        mb.append(appm)
+        mb.append(sortby)
+        mb.show_all()
+        vbox = builder.get_object("boxMenuBar")
+        vbox.pack_start(mb, False, False, 0)
+
+
+
+        #Remove label from reset buttons
+        btResetProjects.set_label("")
+        btResetPriority.set_label("")
+        irevert = Gtk.Image()
+        irevert.set_from_icon_name("gtk-revert-to-saved",Gtk.IconSize.SMALL_TOOLBAR)
+        btResetPriority.set_image(irevert)
+        irevert = Gtk.Image()
+        irevert.set_from_icon_name("gtk-revert-to-saved",Gtk.IconSize.SMALL_TOOLBAR)
+        btResetProjects.set_image(irevert)
+
+
+        #Show last used projects in ListBox
+        fillLBProjects(1)
+
+        #Show Priorities ListBox
+        fillLBPriorities()
+
+        #Show pending tasks of selected project
         FillTasksCB()
-
 
         wChangeTask.show()
 
