@@ -15,9 +15,8 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk,GObject
 from tasklib import TaskWarrior, Task
 
-builder = Gtk.Builder()
 
-class PomodoroApp(dbus.service.Object):
+class PomodoroSystray(dbus.service.Object):
     bus_name = "org.liloman.pomodoro.systray"
     state = ""
 
@@ -439,12 +438,13 @@ if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     loop = GObject.MainLoop()
 
+    builder = Gtk.Builder()
 
     try:
        if len(sys.argv) == 2:
-           app = PomodoroApp(sys.argv[1])
+           systray = PomodoroSystray(sys.argv[1])
        else:
-           app = PomodoroApp()
+           systray = PomodoroSystray()
     except:
        print "No pomodoro daemon found"
        sys.exit(1)
@@ -456,7 +456,7 @@ if __name__ == '__main__':
     thread.start()
 
     #update the trayicon
-    app.status()
+    systray.status()
 
     #must be in the main thread
     Gtk.main()

@@ -53,9 +53,9 @@ class Pomodoro(dbus.service.Object):
     state = ""
     #timeout pomodoro (minutes)
     timer_pomodoro = int(os.getenv('POMODORO_TIMEOUT',25))
-    #short break time pomodoro (minutes)
+    #pomodoro short break time (minutes)
     stimeout = str(os.getenv('POMODORO_STIMEOUT',5))
-    #long break time pomodoro (minutes)
+    #pomodoro long break time (minutes)
     ltimeout = str(os.getenv('POMODORO_LTIMEOUT',15))
     #Number of breaks to take a long break (LONG_TIME_BREAK)
     maxbreaks = 4
@@ -338,9 +338,9 @@ if __name__ == '__main__':
 
     #run the systray
     if len(sys.argv) == 2:
-            subprocess.Popen(['./pomodoro-systray.py', sys.argv[1]])
+            subprocess.Popen(['./systray.py', sys.argv[1]])
     elif len(sys.argv) == 1:
-        subprocess.Popen(['./pomodoro-systray.py'])
+        subprocess.Popen(['./systray.py'])
     #dont lauch the systray when testing len(sys.argv)==3
 
     loop.run()
