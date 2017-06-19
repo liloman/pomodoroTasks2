@@ -124,7 +124,7 @@ class TestPomodoro(unittest.TestCase):
         interface.do_quit(False)
 
 if __name__ == '__main__':
-    Popen(["python", "../pomodoro-daemon.py","test/.task","testing"]) 
+    Popen(["python", "../daemon.py","test/.task","testing"]) 
     # wait 1 second to bring up the service
     time.sleep(1)
     bus = dbus.SessionBus()
