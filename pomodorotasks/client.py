@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 #Basic client for the pomodoroTasks2 daemon
 
+from __future__ import print_function
+from builtins import str
+from builtins import object
 import getopt
 import dbus
 import sys
@@ -21,7 +24,7 @@ class Client(object):
     #     print "Client constructor"
 
     def usage(self):
-        print """
+        print("""
         Usage:"""+ os.path.basename(sys.argv[0])+""" OPTIONS
 
         Daemon options:
@@ -38,7 +41,7 @@ class Client(object):
         General options:
            -h, --help      show this help
            quit            quit the pomodoro daemon & systray
-        """
+        """)
 
     #Execute the command on the daemon through dbus
     def doCommand(self,comm):
@@ -47,7 +50,7 @@ class Client(object):
         if self.com == "quit":
             #close systray when closing the daemon as well
             self.interface.do_quit(True)
-            print "pomodoro daemon halted"
+            print("pomodoro daemon halted")
         # Show the change task gui
         elif self.com == "systray":
             # use busConnection better than bus = dbus.SessionBus() to work with systemd for example
@@ -58,13 +61,13 @@ class Client(object):
         # Start a uuid task
         elif self.com == "do_start":
             if len(sys.argv) != 3:
-                print "must pass a valid uuid"
+                print("must pass a valid uuid")
                 sys.exit(1)
             dic = dbus.Dictionary({'uuid': sys.argv[2] , 'resume': 'No'  } , signature = 'ss' )
             try:
                 print ("reply:"+self.interface.do_start(dic)[0])
             except:
-                print "Incorrect uuid:"+sys.argv[2]+" .The task couldn't be started"
+                print("Incorrect uuid:"+sys.argv[2]+" .The task couldn't be started")
         # Do any other command
         else:
             print(u''.join(self.interface.do_fsm(self.com)[0]).encode('utf-8').strip())
@@ -116,7 +119,7 @@ class Client(object):
                     break
 
         if not self.dbus_path:
-            print "Couldn't find a dbus session address"
+            print("Couldn't find a dbus session address")
             sys.exit(1)
 
         try:
@@ -125,14 +128,14 @@ class Client(object):
             self.session_bus = self.bus.get_object('org.liloman.pomodoro', "/daemon")
             self.interface = dbus.Interface(self.session_bus, "org.liloman.pomodoroInterface")
         except:
-            print "no pomodoro daemon detected"
+            print("no pomodoro daemon detected")
             sys.exit(1)
 
 
 if __name__ == '__main__':
 
     if len(sys.argv) == 1:
-        print "must pass and option. try "+os.path.basename(sys.argv[0])+" -h"
+        print("must pass and option. try "+os.path.basename(sys.argv[0])+" -h")
         sys.exit(1)
 
     client = Client()

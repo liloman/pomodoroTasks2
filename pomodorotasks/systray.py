@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 # For dbus
+from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -305,7 +309,7 @@ class PomodoroSystray(dbus.service.Object):
                     project=u''.join(task['project']).encode('utf-8').strip()
                     modified=task['modified']
                     count = 1
-                    if projects.has_key(project):
+                    if project in projects:
                          value = projects.get(project)
                          count = value[1] + 1
                          if modified < value[0]:
@@ -315,7 +319,7 @@ class PomodoroSystray(dbus.service.Object):
                 next
         #Convert dict to a list of tuples
         tProjects = []
-        for name, value in projects.iteritems():
+        for name, value in projects.items():
             tProjects.append ( (name, value[0], value[1] ) )
 
 
@@ -446,7 +450,7 @@ if __name__ == '__main__':
        else:
            systray = PomodoroSystray()
     except:
-       print "No pomodoro daemon found"
+       print("No pomodoro daemon found")
        sys.exit(1)
 
 

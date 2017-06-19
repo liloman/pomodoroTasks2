@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # Pomodoro daemon with FSM
 
+from __future__ import print_function
+from __future__ import division
+from builtins import str
+from past.utils import old_div
 import os
 import threading
 from tasklib import TaskWarrior, Task
@@ -182,9 +186,9 @@ class Pomodoro(dbus.service.Object):
                     desc=u''.join(last['description']).encode('utf-8').strip() 
             msg="\nBreak num:"+str(self.breaks)+" Continuous mode:"+str(self.continuous)+"\nLast Project:"+project+"\n"+desc
 
-        rest = self.timer_pomodoro / 8
+        rest = old_div(self.timer_pomodoro, 8)
         if rest > 0:
-            actual=self.time_elapsed / (rest*60)
+            actual=old_div(self.time_elapsed, (rest*60))
         else:
             actual=0
         i_started = "images/iconStarted-{0}.png".format(actual)
