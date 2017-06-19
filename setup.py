@@ -3,7 +3,7 @@ from setuptools import setup,find_packages
 
 setup(
     name="pomodorotasks",
-    packages=find_packages(exclude=['test' 'test/*']),
+    packages=find_packages(exclude=['tests' 'tests/*']),
     install_requires=['tasklib', 'pygobject', 'dbus-python','future'],
     entry_points={
         'console_scripts': [
