@@ -1,0 +1,17 @@
+Metadata-Version: 1.0
+Name: pomodoroTasks2
+Version: 0.5.0.dev78
+Summary: UNKNOWN
+Home-page: UNKNOWN
+Author: liloman
+Author-email: "trazo.en.verde@gmail.com"
+License: GPLv3
+Description: "Graphical trayicon to pomodoro with taskwarrior/timewarrior"
+Keywords: taskwarrior
+pomodoro
+workflow
+reminder
+time-tracking
+timewarrior
+habit-tracking
+Platform: UNKNOWN

@@ -1,0 +1,6 @@
+[console_scripts]
+pomodoro-tasks-client = pomodoro.client:main
+
+[gui_scripts]
+pomodoro-tasks-daemon = pomodorotasks.daemon:main
+
