@@ -1,4 +1,0 @@
-tasklib
-pygobject
-dbus-python
-future
