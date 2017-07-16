@@ -63,6 +63,7 @@ timew <<< yes
 
 ```bash
 git clone https://github.com/liloman/pomodoroTasks2
+git checkout stable
 cd pomodoroTasks2/
 ./pomodoro-daemon.py
 ```
@@ -95,6 +96,7 @@ If you wish to track every task of taskwarrior in timewarrior you need to:
 
  ```bash
  git clone https://github.com/liloman/pomodoroTasks2
+ git checkout stable
  cd pomodoroTasks2/
  ./extras/prepare_hooks.sh install .
  ```
@@ -193,6 +195,7 @@ If you installed the package it will add a new command to /usr/bin/ otherwise yo
 
  ```bash
 git clone https://github.com/liloman/pomodoroTasks2
+git checkout stable
 cd pomodoroTasks2/extras
 cp add-reminder.sh wherever-you-want-it
  ```
