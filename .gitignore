@@ -1,3 +1,5 @@
 test/.task
 *~
 .*.swp
+pomodoroTasks*.egg.info
+.eggs
