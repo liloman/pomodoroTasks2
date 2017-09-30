@@ -50,7 +50,7 @@ task <<< yes
 
 ```bash
 sudo dnf/apt-get/whatever install build-essential cmake 
-git clone --recursive https://git.tasktools.org/scm/tm/timew.git timew.git
+git clone --recursive https://git.tasktools.org/TM/timew.git timew.git
 cd timew.git
 git checkout master 
 cmake -DCMAKE_BUILD_TYPE=release .
