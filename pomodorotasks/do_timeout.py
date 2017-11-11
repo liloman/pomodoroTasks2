@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 #Timeout screen
 
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 from builtins import str
 from builtins import object
+
 import dbus
 import dbus.service
 import subprocess

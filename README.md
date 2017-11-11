@@ -41,7 +41,9 @@ Manual
 1. Taskwarrior dependencies (python based)
 
 ```bash
-pip install tasklib --user
+pip install tasklib --user (stable branch)
+pip install tasklib future --user (other branches)
+
 sudo dnf/apt-get/whatever install taskwarrior/task/whatever
 task <<< yes
 ```

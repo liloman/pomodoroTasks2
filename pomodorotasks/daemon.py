@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 # Pomodoro daemon with FSM
 
-from __future__ import print_function
-from __future__ import division
-from builtins import str
+# from __future__ import print_function
+# from __future__ import division
+# from builtins import str
+from __future__ import absolute_import, division, print_function
+
+
 from past.utils import old_div
+
+
 import os
 import threading
 from tasklib import TaskWarrior, Task

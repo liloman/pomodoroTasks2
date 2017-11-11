@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 #Basic client for the pomodoroTasks2 daemon
 
-from __future__ import print_function
-from builtins import str
-from builtins import object
+# from __future__ import print_function
+# from builtins import str
+# from builtins import object
+from __future__ import absolute_import, division, print_function
+
 import getopt
 import dbus
 import sys

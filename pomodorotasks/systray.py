@@ -1,10 +1,16 @@
 #!/usr/bin/env python
 
-# For dbus
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
+# from __future__ import print_function
+# from future import standard_library
+# standard_library.install_aliases()
+#
+from __future__ import absolute_import, division, print_function
+
+
 from builtins import str
+
+
+# For dbus
 import dbus
 import dbus.service
 import dbus.mainloop.glib
